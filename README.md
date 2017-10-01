@@ -24,7 +24,7 @@ If you are using a Pi Camera V1, run `make camera_v1`
 
 If you are using a Pi Camera V2, run `make camera_v2`
 
-If you only want to make the merge_jpg program, run `make merge_jpg`
+If you only want to make the merge_jpg program, run `make lj92_merge`
 
 merge_jpg is not camera version dependent.
 
@@ -45,7 +45,7 @@ If you are using a Raspberry Pi A/B(+)/Zero (W):
 Performance
 ===========
 
-Only the Lossless JPEG compression is threaded, and is split up per-component.
+Only the Lossless JPEG compression is threaded, and is split up per-component. Therefore, 4-component compression can be threaded better.
 
 Raspberry Pi 3, Camera V1 RAW file
 ----------------------------------
@@ -69,5 +69,5 @@ Tests were done on an ISO100, ISO400, and ISO800 source.
 * 2 components: 70.7%, 73.6%, 84.8%
 * 4 components: 70.1%, 73.8%, 84.4%
 
-Performance is slightly worse than Adobe's DNG compressor.
+Compression performance is slightly worse than Adobe's DNG compressor.
 

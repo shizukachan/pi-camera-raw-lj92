@@ -1,4 +1,4 @@
-CFLAGS = -g -Wpointer-sign -Wunused-variable -std=gnu99 -Wunused-but-set-variable
+CFLAGS = -g -Wpointer-sign -Wunused-variable -std=gnu99 -Wunused-but-set-variable -O3 -funroll-loops
 
 all:
 	@echo Please specify camera_v1 or camera_v2.
