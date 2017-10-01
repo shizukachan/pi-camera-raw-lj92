@@ -25,6 +25,7 @@ If you are using a Pi Camera V1, run `make camera_v1`
 If you are using a Pi Camera V2, run `make camera_v2`
 
 If you only want to make the merge_jpg program, run `make merge_jpg`
+
 merge_jpg is not camera version dependent.
 
 Recommended Compilation Options
@@ -49,16 +50,16 @@ Only the Lossless JPEG compression is threaded, and is split up per-component.
 Raspberry Pi 3, Camera V1 RAW file
 ----------------------------------
 
-Single thread, 2 components: ~619ms
-Multithreaded, 2 components: ~338ms (1.83x)
-Single thread, 4 components: ~619ms
-Multithreaded, 4 components: ~241ms (2.57x)
+* Single thread, 2 components: ~619ms
+* Multithreaded, 2 components: ~338ms (1.83x)
+* Single thread, 4 components: ~619ms
+* Multithreaded, 4 components: ~241ms (2.57x)
 
 Raspberry Pi Zero, Camera V1 RAW file
 -------------------------------------
 
-Single thread, 2 components: ~1072ms
-Single thread, 4 components: ~1059ms
+* Single thread, 2 components: ~1072ms
+* Single thread, 4 components: ~1059ms
 
 Compression
 ===========
