@@ -81,10 +81,9 @@ int main(int argc, char **argv)
 	unsigned int components = 2;
 	unsigned char *img = 0;
 	unsigned short *img16 = 0;
-        FILE *A = fopen(argv[1],"r+b");
 	if (argc<2 || argc>=4)
 	{
-		puts("usage: split_jpg <jpeg_file_with_raw_data> <number of components (2,4)>");
+		puts("usage: split_jpg <jpeg_file_with_raw_data> <optional: number of components (2,4)>");
 		return -1;
 	}
 	if (argc==3)
@@ -95,6 +94,12 @@ int main(int argc, char **argv)
 			fprintf(stderr,"invalid number of components (2,4)");
 			return -1;
 		}
+	}
+        FILE *A = fopen(argv[1],"r+b");
+	if (A==NULL)
+	{
+		fprintf(stderr,"can't open input file");
+		return -1;
 	}
 	char fn[256];
 	strcpy(fn,argv[1]);
@@ -124,7 +129,7 @@ int main(int argc, char **argv)
         if (fl < RAWSIZE)
         {
                 fprintf(stderr,"file too short");
-                exit(1);
+                return -2;
         }
         long offset = fl - RAWSIZE;
         fseek(A,offset,SEEK_SET);
@@ -139,7 +144,7 @@ int main(int argc, char **argv)
 		if (!img || !img16)
 		{
 			fprintf(stderr,"insufficient memory");
-			exit(1);
+			return -1;
 		}
 		fread(img,RAW_ROW,RAW_V,A);
 		unsigned char *output[4]={0,0,0,0};
@@ -192,7 +197,7 @@ int main(int argc, char **argv)
 				if (err)
 				{
 					fprintf(stderr,"BUG: pthread_create fail: %d",err);
-					return 1;
+					return -3;
 				}
 			}
 			pthread_attr_destroy(&attr);
@@ -205,7 +210,7 @@ int main(int argc, char **argv)
 				if (err)
 				{
 					fprintf(stderr,"BUG: pthread_join fail: %d",err);
-					return 1;
+					return -3;
 				}
 			}
 #else
@@ -215,7 +220,7 @@ int main(int argc, char **argv)
 			if (retVal!=0)
 			{
 				fprintf(stderr,"lj92 returned error %08x",retVal);
-				return 1;
+				return -3;
 			}
 #ifdef DEBUG
 			printf("totalsize=%u (%2.4f%%)\n",output_length[0]+output_length[1],100.0f*(float)(output_length[0]+output_length[1])/((float)(RAW_H*RAW_V*RAW_BITS/8)));
@@ -247,7 +252,7 @@ int main(int argc, char **argv)
 				if (err)
 				{
 					fprintf(stderr,"BUG: pthread_create fail: %d",err);
-					return 1;
+					return -3;
 				}
 			}
 			pthread_attr_destroy(&attr);
@@ -260,7 +265,7 @@ int main(int argc, char **argv)
 				if (err)
 				{
 					fprintf(stderr,"BUG: pthread_join fail: %d",err);
-					return 1;
+					return -3;
 				}
 			}
 #else
@@ -275,7 +280,7 @@ int main(int argc, char **argv)
 			if (retVal!=0)
 			{
 				fprintf(stderr,"lj92 returned error %08x",retVal);
-				return 1;
+				return -3;
 			}
 			raw[0].SIZE = output_length[0];
 			raw[0].OFFSET = 0;
