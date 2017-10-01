@@ -217,6 +217,9 @@ int main(int argc, char **argv)
 				fprintf(stderr,"lj92 returned error %08x",retVal);
 				return 1;
 			}
+#ifdef DEBUG
+			printf("totalsize=%u (%2.4f%%)\n",output_length[0]+output_length[1],100.0f*(float)(output_length[0]+output_length[1])/((float)(RAW_H*RAW_V*RAW_BITS/8)));
+#endif
 			raw[0].SIZE = output_length[0];
 			raw[0].OFFSET = 0;
 			raw[0].H = RAW_H;
@@ -265,6 +268,9 @@ int main(int argc, char **argv)
 			retVal |= lj92_encode(img16+RAW_H/2  ,RAW_H/2,RAW_V/2,RAW_BITS,RAW_H/2,3*RAW_H/2,NULL,0, &output[1], &output_length[1]);
 			retVal |= lj92_encode(img16+RAW_H    ,RAW_H/2,RAW_V/2,RAW_BITS,RAW_H/2,3*RAW_H/2,NULL,0, &output[2], &output_length[2]);
 			retVal |= lj92_encode(img16+3*RAW_H/2,RAW_H/2,RAW_V/2,RAW_BITS,RAW_H/2,3*RAW_H/2,NULL,0, &output[3], &output_length[3]);
+#endif
+#ifdef DEBUG
+			printf("totalsize=%u (%2.4f%%)\n",output_length[0]+output_length[1]+output_length[2]+output_length[3],100.0f*(float)(output_length[0]+output_length[1]+output_length[2]+output_length[3])/((float)(RAW_H*RAW_V*RAW_BITS/8)));
 #endif
 			if (retVal!=0)
 			{

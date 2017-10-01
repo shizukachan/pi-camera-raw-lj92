@@ -1,7 +1,7 @@
 CFLAGS = -g -Wpointer-sign -Wunused-variable -std=gnu99 -Wunused-but-set-variable
 
 all:
-	nano README.md
+	@echo Please specify camera_v1 or camera_v2.
 
 camera_v1: CAMERA_VERSION = CAMERA_V1
 camera_v1: lj92_split lj92_merge
