@@ -4,25 +4,6 @@ Lossless JPEG compressor for RAW portion of Raspberry Pi Camera RAW format.
 
 Uses a modified version of the lj92 library found [here](https://bitbucket.org/baldand/mlrawviewer/src/master/liblj92/?at=master).
 
-Programs
-========
-
-split_jpg
----------
-
-Designed to run on the Raspberry Pi. Splits a Raspberry Pi Camera JPEG+RAW file into the JPEG and the RAW portions, then compresses the RAW portion with Lossless JPEG (1992) format. This algorithm takes a fair bit of time to run on a Pi, so it's suggested to enable threaded lj92 execution on multicore Raspberry Pi systems. Because this program needs to be fast, I've chosen to use #define to set the camera version and compile on the Raspberry Pi.
-
-To split a Raspberry Pi JPEG+RAW into a truncated JPEG and its compressed RAW portion (ljpg), run `split_jpg jpeg_file.jpg`. The original JPEG will be truncated to remove all compressed data. You may specify two-component or four-component compression by passing in `split_jpg jpeg_file.jpg 2` or `split_jpg jpeg_file.jpg 4`, respectively. Two-component compression is the default.
-
-Garbage in the RAW image data (ie. unset pixels at the last vertical lines of RAW data, the last few horizontal lines of RAW data) will be discarded during compression, ass it serves no purpose for imaging.
-
-merge_jpg
----------
-
-Designed to combine a JPEG+RAW file split into JPEG and LJ92-compressed RAW portion back into a JPEG+RAW file. This makes the output compatible with most other programs that manipulate Raspberry Pi Camera RAW files.
-
-To merge a truncated JPEG and a ljpg produced by split_jpg, just place the ljpg in the same directory as the truncated JPEG file, then run `merge_jpg split_jpeg_file.jpg` This will decompress split_jpeg_file.ljpg into the same RAW format used in the JPEG+RAW format produced by picamera, excluding garbage data. A merged file can then be used with other applications that expect the Raspberry Pi Camera JPEG+RAW format.
-
 Makefile
 ========
 
@@ -33,6 +14,29 @@ If you are using a Pi Camera V2, run `make camera_v2`
 If you only want to make the merge_jpg program, run `make lj92_merge`
 
 merge_jpg is not camera version dependent.
+
+Programs
+========
+
+split_jpg
+---------
+
+Designed to run on the Raspberry Pi. Splits a Raspberry Pi Camera JPEG+RAW file into the JPEG and the RAW portions, then compresses the RAW portion with Lossless JPEG (1992) format. This algorithm takes a fair bit of time to run on a Pi, so it's suggested to enable threaded lj92 execution on multicore Raspberry Pi systems.
+
+To split a Raspberry Pi JPEG+RAW into a truncated JPEG and its compressed RAW portion (ljpg), run `split_jpg jpeg_file.jpg`. The original JPEG will be truncated to remove all compressed data. You may specify two-component or four-component compression by passing in `split_jpg jpeg_file.jpg 2` or `split_jpg jpeg_file.jpg 4`, respectively. Two-component compression is the default.
+
+merge_jpg
+---------
+
+Designed to combine a JPEG+RAW file split into JPEG and LJ92-compressed RAW portion back into a JPEG+RAW file. This makes the output compatible with most other programs that manipulate Raspberry Pi Camera RAW files.
+
+To merge a truncated JPEG and a ljpg produced by split_jpg, just place the ljpg in the same directory as the truncated JPEG file, then run `merge_jpg split_jpeg_file.jpg` This will recreate the split_jpeg_file.jpg with the same RAW data that was stripped off and compressed by split_jpg.
+
+Design Decisions
+================
+Because this program needs to be fast, I've chosen to use #define to set the camera version and compile on the Raspberry Pi.
+
+I've chosen to discard non-imaging RAW data in the original RAW. This includes unset padding pixels in the last vertical lines and the last few horizontal lines of RAW data. This reduces filesize without affecting imaging output.
 
 Recommended Compilation Options
 ===============================
@@ -52,6 +56,8 @@ Performance
 ===========
 
 Only the Lossless JPEG compression is threaded, and is split up per-component. Therefore, 4-component compression can be threaded better.
+
+For a better explanation of "components", please see [this](https://thndl.com/how-dng-compresses-raw-data-with-lossless-jpeg92.html) article.
 
 Raspberry Pi 3, Camera V1 RAW file
 ----------------------------------
