@@ -154,16 +154,16 @@ int main(int argc, char **argv)
 			for (int col = 0; col < RAW_H; col+= 4) {  // iterate over pixel columns
 //				refactored: original code was inefficient with memory access.
 				unsigned short a, b, c, d, e;
-				a=img[j++];
-				b=img[j++];
-				c=img[j++];
-				d=img[j++];
-				e=img[j++];
+				a=img[j+0];
+				b=img[j+1];
+				c=img[j+2];
+				d=img[j+3];
+				e=img[j+4];
 				img16[row*RAW_H+col+0] = (a << 2) | ((e & 0b11000000)>>6);
 				img16[row*RAW_H+col+1] = (b << 2) | ((e & 0b00110000)>>4);
 				img16[row*RAW_H+col+2] = (c << 2) | ((e & 0b00001100)>>2);
 				img16[row*RAW_H+col+3] = (d << 2) | ((e & 0b00000011));
-
+				j+=5;
 			}
 			j+=RAW_PAD;
 		}
